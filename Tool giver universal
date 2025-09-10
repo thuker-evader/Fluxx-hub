@@ -1,0 +1,159 @@
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage") -- In case tools are there, but we search all
+
+local player = Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "ToolsGiverGui"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.ResetOnSpawn = false
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 300, 0, 400)
+mainFrame.Position = UDim2.new(0.5, -150, 0.5, -200)
+mainFrame.BackgroundColor3 = Color3.fromRGB(242, 243,243) 
+mainFrame.BorderColor3 = Color3.fromRGB(27, 42, 53) -- Dark blue-gray
+mainFrame.BorderSizePixel = 2
+mainFrame.Parent = screenGui
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "Title"
+titleLabel.Size = UDim2.new(1, 0, 0, 30)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundColor3 = Color3.fromRGB(0, 162,255)
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextSize = 18
+titleLabel.Text = "Tools Giver - Fluxx"
+titleLabel.Parent = mainFrame
+
+local closeButton = Instance.new("TextButton")
+closeButton.Name = "CloseButton"
+closeButton.Size = UDim2.new(0, 30, 0, 30)
+closeButton.Position = UDim2.new(1, -30, 0, 0)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.Font = Enum.Font.SourceSansBold
+closeButton.TextSize = 18
+closeButton.Text = "X"
+closeButton.Parent = mainFrame
+
+closeButton.MouseButton1Click:Connect(function()
+    screenGui.Enabled = false
+end)
+
+local searchBox = Instance.new("TextBox")
+searchBox.Name = "SearchBox"
+searchBox.Size = UDim2.new(1, -10, 0, 30)
+searchBox.Position = UDim2.new(0, 5, 0, 35)
+searchBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+searchBox.BorderColor3 = Color3.fromRGB(27, 42, 53)
+searchBox.BorderSizePixel = 1
+searchBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+searchBox.Font = Enum.Font.SourceSans
+searchBox.TextSize = 14
+searchBox.PlaceholderText = "Search for a tool..."
+searchBox.ClearTextOnFocus = false
+searchBox.Parent = mainFrame
+
+local scrollingFrame = Instance.new("ScrollingFrame")
+scrollingFrame.Name = "ToolsList"
+scrollingFrame.Size = UDim2.new(1, -10, 1, -75)
+scrollingFrame.Position = UDim2.new(0, 5, 0, 70)
+scrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+scrollingFrame.BorderColor3 = Color3.fromRGB(27, 42, 53)
+scrollingFrame.BorderSizePixel = 1
+scrollingFrame.ScrollBarThickness = 8
+scrollingFrame.Parent = mainFrame
+
+local uiListLayout = Instance.new("UIListLayout")
+uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+uiListLayout.Padding = UDim.new(0, 5)
+uiListLayout.Parent = scrollingFrame
+
+
+local function createToolButton(tool)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(1, 0, 0, 30)
+    button.BackgroundColor3 = Color3.fromRGB(0, 162,255) 
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.SourceSans
+    button.TextSize = 14
+    button.Text = tool.Name
+    button.Parent = scrollingFrame
+
+    button.MouseButton1Click:Connect(function()
+        local clonedTool = tool:Clone()
+        clonedTool.Parent = backpack
+        print("Gave tool: " .. tool.Name)
+    end)
+
+    return button
+end
+
+local toolsByName = {}
+for _, obj in ipairs(game:GetDescendants()) do
+    if obj:IsA("Tool") and not toolsByName[obj.Name] then
+        toolsByName[obj.Name] = obj
+    end
+end
+
+local toolButtons = {}
+for name, tool in pairs(toolsByName) do
+    local button = createToolButton(tool)
+    table.insert(toolButtons, {Button = button, Name = name:lower()})
+end
+
+local function updateList(searchText)
+    searchText = searchText:lower()
+    for _, item in ipairs(toolButtons) do
+        if searchText == "" or item.Name:find(searchText) then
+            item.Button.Visible = true
+        else
+            item.Button.Visible = false
+        end
+    end
+    
+    scrollingFrame.CanvasSize = UDim2.new(0, 0, 0, uiListLayout.AbsoluteContentSize.Y + 10)
+end
+
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+    updateList(searchBox.Text)
+end)
+
+updateList("")
+
+local dragging, dragInput, dragStart, startPos
+local function update(input)
+    local delta = input.Position - dragStart
+    mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+mainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+mainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        update(input)
+    end
+end)
+
+screenGui.Enabled = true
