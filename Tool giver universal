@@ -1,5 +1,5 @@
 local Players = game:GetService("Players")
-local ReplicatedStorage = game:GetService("ReplicatedStorage") -- In case tools are there, but we search all
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local player = Players.LocalPlayer
 local backpack = player:WaitForChild("Backpack")
@@ -14,9 +14,14 @@ mainFrame.Name = "MainFrame"
 mainFrame.Size = UDim2.new(0, 300, 0, 400)
 mainFrame.Position = UDim2.new(0.5, -150, 0.5, -200)
 mainFrame.BackgroundColor3 = Color3.fromRGB(242, 243,243) 
-mainFrame.BorderColor3 = Color3.fromRGB(27, 42, 53) -- Dark blue-gray
+mainFrame.BorderColor3 = Color3.fromRGB(27, 42, 53)
 mainFrame.BorderSizePixel = 2
 mainFrame.Parent = screenGui
+mainFrame.Visible = false
+
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 12)
+mainCorner.Parent = mainFrame
 
 local titleLabel = Instance.new("TextLabel")
 titleLabel.Name = "Title"
@@ -29,6 +34,17 @@ titleLabel.TextSize = 18
 titleLabel.Text = "Tools Giver - Fluxx"
 titleLabel.Parent = mainFrame
 
+local titleGradient = Instance.new("UIGradient")
+titleGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 162, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 100, 200))
+}
+titleGradient.Parent = titleLabel
+
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 12)
+titleCorner.Parent = titleLabel
+
 local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
 closeButton.Size = UDim2.new(0, 30, 0, 30)
@@ -39,6 +55,10 @@ closeButton.Font = Enum.Font.SourceSansBold
 closeButton.TextSize = 18
 closeButton.Text = "X"
 closeButton.Parent = mainFrame
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 6)
+closeCorner.Parent = closeButton
 
 closeButton.MouseButton1Click:Connect(function()
     screenGui.Enabled = false
@@ -58,6 +78,15 @@ searchBox.PlaceholderText = "Search for a tool..."
 searchBox.ClearTextOnFocus = false
 searchBox.Parent = mainFrame
 
+local searchCorner = Instance.new("UICorner")
+searchCorner.CornerRadius = UDim.new(0, 8)
+searchCorner.Parent = searchBox
+
+local searchStroke = Instance.new("UIStroke")
+searchStroke.Color = Color3.fromRGB(27, 42, 53)
+searchStroke.Thickness = 1
+searchStroke.Parent = searchBox
+
 local scrollingFrame = Instance.new("ScrollingFrame")
 scrollingFrame.Name = "ToolsList"
 scrollingFrame.Size = UDim2.new(1, -10, 1, -75)
@@ -68,11 +97,14 @@ scrollingFrame.BorderSizePixel = 1
 scrollingFrame.ScrollBarThickness = 8
 scrollingFrame.Parent = mainFrame
 
+local scrollCorner = Instance.new("UICorner")
+scrollCorner.CornerRadius = UDim.new(0, 8)
+scrollCorner.Parent = scrollingFrame
+
 local uiListLayout = Instance.new("UIListLayout")
 uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 uiListLayout.Padding = UDim.new(0, 5)
 uiListLayout.Parent = scrollingFrame
-
 
 local function createToolButton(tool)
     local button = Instance.new("TextButton")
@@ -83,6 +115,17 @@ local function createToolButton(tool)
     button.TextSize = 14
     button.Text = tool.Name
     button.Parent = scrollingFrame
+
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0, 6)
+    buttonCorner.Parent = button
+
+    local buttonGradient = Instance.new("UIGradient")
+    buttonGradient.Color = ColorSequence.new{
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 162, 255)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 120, 220))
+    }
+    buttonGradient.Parent = button
 
     button.MouseButton1Click:Connect(function()
         local clonedTool = tool:Clone()
@@ -153,6 +196,109 @@ end)
 game:GetService("UserInputService").InputChanged:Connect(function(input)
     if dragging and input == dragInput then
         update(input)
+    end
+end)
+
+local keyFrame = Instance.new("Frame")
+keyFrame.Name = "KeyFrame"
+keyFrame.Size = UDim2.new(0, 300, 0, 200)
+keyFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+keyFrame.BackgroundColor3 = Color3.fromRGB(242, 243, 243)
+keyFrame.BorderSizePixel = 0
+keyFrame.Parent = screenGui
+
+local keyFrameCorner = Instance.new("UICorner")
+keyFrameCorner.CornerRadius = UDim.new(0, 12)
+keyFrameCorner.Parent = keyFrame
+
+local keyFrameStroke = Instance.new("UIStroke")
+keyFrameStroke.Color = Color3.fromRGB(27, 42, 53)
+keyFrameStroke.Thickness = 2
+keyFrameStroke.Transparency = 0.2
+keyFrameStroke.Parent = keyFrame
+
+local keyTitle = Instance.new("TextLabel")
+keyTitle.Name = "KeyTitle"
+keyTitle.Size = UDim2.new(1, 0, 0, 40)
+keyTitle.Position = UDim2.new(0, 0, 0, 0)
+keyTitle.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
+keyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyTitle.Font = Enum.Font.SourceSansBold
+keyTitle.TextSize = 20
+keyTitle.Text = "Key Authentication"
+keyTitle.Parent = keyFrame
+
+local keyTitleGradient = Instance.new("UIGradient")
+keyTitleGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 162, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 100, 200))
+}
+keyTitleGradient.Parent = keyTitle
+
+local keyTitleCorner = Instance.new("UICorner")
+keyTitleCorner.CornerRadius = UDim.new(0, 12)
+keyTitleCorner.Parent = keyTitle
+
+local keyBox = Instance.new("TextBox")
+keyBox.Name = "KeyBox"
+keyBox.Size = UDim2.new(1, -40, 0, 40)
+keyBox.Position = UDim2.new(0, 20, 0, 60)
+keyBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.BorderSizePixel = 0
+keyBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+keyBox.Font = Enum.Font.SourceSans
+keyBox.TextSize = 16
+keyBox.PlaceholderText = "Enter key here..."
+keyBox.ClearTextOnFocus = false
+keyBox.Parent = keyFrame
+
+local keyBoxCorner = Instance.new("UICorner")
+keyBoxCorner.CornerRadius = UDim.new(0, 8)
+keyBoxCorner.Parent = keyBox
+
+local keyBoxStroke = Instance.new("UIStroke")
+keyBoxStroke.Color = Color3.fromRGB(27, 42, 53)
+keyBoxStroke.Thickness = 1
+keyBoxStroke.Transparency = 0.5
+keyBoxStroke.Parent = keyBox
+
+local checkButton = Instance.new("TextButton")
+checkButton.Name = "CheckButton"
+checkButton.Size = UDim2.new(0, 120, 0, 40)
+checkButton.Position = UDim2.new(0.5, -60, 1, -60)
+checkButton.BackgroundColor3 = Color3.fromRGB(0, 162, 255)
+checkButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+checkButton.Font = Enum.Font.SourceSansBold
+checkButton.TextSize = 18
+checkButton.Text = "Check Key"
+checkButton.Parent = keyFrame
+
+local checkButtonCorner = Instance.new("UICorner")
+checkButtonCorner.CornerRadius = UDim.new(0, 8)
+checkButtonCorner.Parent = checkButton
+
+local checkButtonGradient = Instance.new("UIGradient")
+checkButtonGradient.Color = ColorSequence.new{
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 162, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 120, 220))
+}
+checkButtonGradient.Parent = checkButton
+
+local checkButtonStroke = Instance.new("UIStroke")
+checkButtonStroke.Color = Color3.fromRGB(0, 100, 200)
+checkButtonStroke.Thickness = 1
+checkButtonStroke.Parent = checkButton
+
+local correctKey = "Fluxx94567419382_$tygn"
+checkButton.MouseButton1Click:Connect(function()
+    if keyBox.Text == correctKey then
+        keyFrame.Visible = false
+        mainFrame.Visible = true
+    else
+        keyBox.Text = ""
+        keyBox.PlaceholderText = "Incorrect key! Try again."
+        wait(2)
+        keyBox.PlaceholderText = "Enter key here..."
     end
 end)
 
