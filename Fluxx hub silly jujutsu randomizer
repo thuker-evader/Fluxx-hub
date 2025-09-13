@@ -1,0 +1,330 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+
+local correctKey = "FluxxSillyrandomizer567098"
+local Window
+
+function loadMainUI()
+    Window = Library.CreateLib("Fluxx Hub", "Synapse")
+    local MainTab = Window:NewTab("Main")
+    local MiscTab = Window:NewTab("Misc")
+    local UltimateSection = MainTab:NewSection("Ultimate")
+
+    UltimateSection:NewButton("Toji", "Activates Toji ultimate", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.tojiult:FireServer() end)
+    end)
+
+    UltimateSection:NewButton("Gojo", "Activates Gojo ultimate", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.gojoult:FireServer() end)
+    end)
+
+    UltimateSection:NewButton("Hakari", "Activates Hakari ultimate", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.hakariultv:FireServer() end)
+    end)
+
+    UltimateSection:NewButton("Mahito", "Activates Mahito ultimate", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.mahiult:FireServer() end)
+    end)
+
+    UltimateSection:NewButton("Mahoraga", "Activates Mahoraga ultimate", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.raga:FireServer() end)
+    end)
+
+    UltimateSection:NewButton("Sukuna", "Activates Sukuna ultimate", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.ulthing:FireServer() end)
+    end)
+
+    UltimateSection:NewButton("Higurama", "Activates Higurama ultimate", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.higurama:FireServer() end)
+    end)
+
+    local MahoragaSkillsetSection = MainTab:NewSection("Mahoraga Skillset")
+
+    MahoragaSkillsetSection:NewButton("Rock Throw", "Throws a rock", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.rock:FireServer() end)
+    end)
+
+    MahoragaSkillsetSection:NewButton("Slam", "Performs a slam attack", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.phone:FireServer() end)
+    end)
+
+    MahoragaSkillsetSection:NewButton("Dash", "Performs a dash", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.ragadash:FireServer() end)
+    end)
+
+    local OPSection = MainTab:NewSection("OP")
+
+    OPSection:NewButton("Timestop", "Activates Timestop", function()
+        pcall(function() game:GetService("ReplicatedStorage").randommoveset.remotes.timestop:FireServer() end)
+    end)
+
+    OPSection:NewButton("Spammy Sniper (LAGGY)", "Fires ballz2 remote 7-14 times", function()
+        local count = math.random(7, 14)
+        for i = 1, count do
+            task.spawn(function() pcall(function() game:GetService("ReplicatedStorage").Remotes.ballz2:FireServer() end) end)
+        end
+    end)
+
+    OPSection:NewButton("Behind You", "Activates Behind You move", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.behindu:FireServer() end)
+    end)
+
+    OPSection:NewButton("Meteor Twins", "Activates Meteor Twins move", function()
+        pcall(function() game:GetService("ReplicatedStorage").Remotes.worldcutcutslash:FireServer() end)
+    end)
+
+    OPSection:NewButton("ULTIMATE Bomb", "Fires multiple bomb remotes 3-5 times", function()
+        local count = math.random(3, 5)
+        for i = 1, count do
+            task.spawn(function()
+                pcall(function() game:GetService("ReplicatedStorage").Remotes.OPEN:FireServer() end)
+                pcall(function() game:GetService("ReplicatedStorage").Remotes.One:FireServer() end)
+                pcall(function() game:GetService("ReplicatedStorage").randommoveset.remotes.bomb:FireServer() end)
+            end)
+        end
+    end)
+
+    OPSection:NewButton("Heal", "Triggers healing 3-5 times", function()
+        local count = math.random(3, 5)
+        for i = 1, count do
+            task.spawn(function() pcall(function() game:GetService("ReplicatedStorage").Remotes.Healing:FireServer() end) end)
+        end
+    end)
+
+    OPSection:NewButton("Boombox Party", "Triggers boombox 10 times", function()
+        for i = 1, 10 do
+            task.spawn(function() pcall(function() game:GetService("ReplicatedStorage").Remotes.boombox:FireServer() end) end)
+        end
+    end)
+
+    local MiscSection = MiscTab:NewSection("Miscellaneous")
+
+    MiscSection:NewButton("ESP", "Toggles ESP to highlight players", function()
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character then
+                local highlight = Instance.new("Highlight")
+                highlight.Parent = player.Character
+                highlight.FillColor = Color3.fromRGB(255, 0, 0)
+                highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+            end
+        end
+    end)
+
+    MiscSection:NewButton("Aimbot (BETA)", "Toggles Aimbot (Beta)", function()
+        print("Aimbot (BETA) toggled - requires external aimbot script for full functionality")
+    end)
+
+    MiscSection:NewButton("Inf Jump", "Toggles Infinite Jump", function()
+        local Players = game:GetService("Players")
+        local UserInputService = game:GetService("UserInputService")
+        local LocalPlayer = Players.LocalPlayer
+        local infJumpEnabled = false
+        local function toggleInfJump()
+            infJumpEnabled = not infJumpEnabled
+            print("Infinite Jump: " .. (infJumpEnabled and "Enabled" or "Disabled"))
+        end
+        UserInputService.JumpRequest:Connect(function()
+            if infJumpEnabled and LocalPlayer.Character then
+                LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+            end
+        end)
+        toggleInfJump()
+    end)
+
+    MiscSection:NewButton("Noclip", "Toggles Noclip", function()
+        local Players = game:GetService("Players")
+        local RunService = game:GetService("RunService")
+        local LocalPlayer = Players.LocalPlayer
+        local noclipEnabled = false
+        local function toggleNoclip()
+            noclipEnabled = not noclipEnabled
+            print("Noclip: " .. (noclipEnabled and "Enabled" or "Disabled"))
+        end
+        RunService.Stepped:Connect(function()
+            if noclipEnabled and LocalPlayer.Character then
+                for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+                    if part:IsA("BasePart") then
+                        part.CanCollide = not noclipEnabled
+                    end
+                end
+            end
+        end)
+        toggleNoclip()
+    end)
+
+    MiscSection:NewSlider("Walkspeed", "Adjust player walkspeed", 100, 16, function(value)
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            LocalPlayer.Character.Humanoid.WalkSpeed = value
+            print("Walkspeed set to: " .. value)
+        end
+    end)
+
+    MiscSection:NewSlider("Jumppower", "Adjust player jumppower", 100, 50, function(value)
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+            LocalPlayer.Character.Humanoid.JumpPower = value
+            print("Jumppower set to: " .. value)
+        end
+    end)
+
+    MiscSection:NewButton("Give All Tools", "Gives all tools from ReplicatedStorage", function()
+        local Players = game:GetService("Players")
+        local ReplicatedStorage = game:GetService("ReplicatedStorage")
+        local LocalPlayer = Players.LocalPlayer
+        for _, tool in pairs(ReplicatedStorage:GetChildren()) do
+            if tool:IsA("Tool") then
+                local toolClone = tool:Clone()
+                toolClone.Parent = LocalPlayer.Backpack
+            end
+        end
+        print("All tools given to player")
+    end)
+end
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+local function trim(s)
+    return (tostring(s):match("^%s*(.-)%s*$") or "")
+end
+
+-- Create ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "FluxxKeyGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = PlayerGui
+
+-- Create main frame with modern styling
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 450, 0, 200)
+frame.Position = UDim2.new(0.5, -225, 0.5, -100)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+
+-- Add UI corner for rounded edges
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 12)
+uiCorner.Parent = frame
+
+-- Add subtle shadow effect
+local uiStroke = Instance.new("UIStroke")
+uiStroke.Thickness = 2
+uiStroke.Color = Color3.fromRGB(50, 50, 50)
+uiStroke.Transparency = 0.5
+uiStroke.Parent = frame
+
+-- Title label
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -20, 0, 40)
+title.Position = UDim2.new(0, 10, 0, 10)
+title.BackgroundTransparency = 1
+title.Text = "Fluxx Hub - Key System"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 24
+title.TextXAlignment = Enum.TextXAlignment.Center
+title.Parent = frame
+
+-- Input box with modern styling
+local inputBox = Instance.new("TextBox")
+inputBox.Size = UDim2.new(1, -40, 0, 50)
+inputBox.Position = UDim2.new(0, 20, 0, 60)
+inputBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+inputBox.PlaceholderText = "Enter your key here"
+inputBox.Text = ""
+inputBox.ClearTextOnFocus = false
+inputBox.Font = Enum.Font.Gotham
+inputBox.TextSize = 18
+inputBox.TextColor3 = Color3.fromRGB(200, 200, 200)
+inputBox.Parent = frame
+
+-- Add corner to input box
+local inputCorner = Instance.new("UICorner")
+inputCorner.CornerRadius = UDim.new(0, 8)
+inputCorner.Parent = inputBox
+
+-- Add subtle stroke to input box
+local inputStroke = Instance.new("UIStroke")
+inputStroke.Thickness = 1
+inputStroke.Color = Color3.fromRGB(100, 100, 100)
+inputStroke.Transparency = 0.7
+inputStroke.Parent = inputBox
+
+-- Submit button with gradient and hover effect
+local submitBtn = Instance.new("TextButton")
+submitBtn.Size = UDim2.new(0, 150, 0, 50)
+submitBtn.Position = UDim2.new(0.5, -75, 1, -60)
+submitBtn.BackgroundColor3 = Color3.fromRGB(0, 120, 255)
+submitBtn.Text = "Submit Key"
+submitBtn.Font = Enum.Font.GothamBold
+submitBtn.TextSize = 18
+submitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+submitBtn.Parent = frame
+
+-- Add corner to button
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0, 8)
+btnCorner.Parent = submitBtn
+
+-- Add gradient to button
+local uiGradient = Instance.new("UIGradient")
+uiGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 120, 255)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(0, 80, 200))
+})
+uiGradient.Rotation = 45
+uiGradient.Parent = submitBtn
+
+-- Add hover effect
+submitBtn.MouseEnter:Connect(function()
+    submitBtn.BackgroundTransparency = 0.1
+end)
+submitBtn.MouseLeave:Connect(function()
+    submitBtn.BackgroundTransparency = 0
+end)
+
+-- Info label
+local infoLabel = Instance.new("TextLabel")
+infoLabel.Size = UDim2.new(1, -40, 0, 30)
+infoLabel.Position = UDim2.new(0, 20, 0, 120)
+infoLabel.BackgroundTransparency = 1
+infoLabel.Text = "Enter the key and click Submit to access Fluxx Hub"
+infoLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
+infoLabel.Font = Enum.Font.Gotham
+infoLabel.TextSize = 14
+infoLabel.TextXAlignment = Enum.TextXAlignment.Center
+infoLabel.Parent = frame
+
+-- Submit button functionality
+submitBtn.MouseButton1Click:Connect(function()
+    local entered = tostring(inputBox.Text)
+    local trimmed = trim(entered)
+    print("DEBUG - entered (raw): ["..entered.."]")
+    print("DEBUG - entered (trimmed): ["..trimmed.."]")
+    if trimmed:lower() == correctKey:lower() then
+        pcall(function()
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "Success",
+                Text = "Key accepted! Loading Fluxx Hub...",
+                Duration = 3
+            })
+        end)
+        screenGui:Destroy()
+        loadMainUI()
+    else
+        pcall(function()
+            game:GetService("StarterGui"):SetCore("SendNotification", {
+                Title = "Error",
+                Text = "Invalid key entered: "..trimmed,
+                Duration = 3
+            })
+        end)
+        print("DEBUG - comparison failed: entered '"..trimmed:lower().."' vs correct '"..correctKey:lower().."'")
+    end
+end)
